@@ -2,6 +2,11 @@ Rails.application.routes.draw do
 
   get "/hello" => "welcome#hello" 
   get "/about" => "about#about"
+
+  get "/questions/new" => "questions#new", as: :new_question
+  post "/questions" => "questions#create", as: :questions
+
+  get "/questions/:id" => "questions#show", as: :question 
   
   root "welcome#index"
 
