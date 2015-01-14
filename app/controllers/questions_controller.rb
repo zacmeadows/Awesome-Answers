@@ -1,7 +1,9 @@
 class QuestionsController < ApplicationController
 
+
+
   def index 
-    @questions = Question.all
+    @questions = Question.order(:id)
   end 
   
   # Used to show the form to create the resource
@@ -26,5 +28,12 @@ class QuestionsController < ApplicationController
 
   def show
     @question = Question.find params[:id]
+    @question.increment!(:view_count)
+    
+    # @question.view_count += 1
+    # @question.save
+
+    # @question.increment(view_count, by = 1)
+    # @question.save
   end 
 end
