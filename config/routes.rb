@@ -5,8 +5,8 @@ Rails.application.routes.draw do
 
   get "/questions/new" => "questions#new", as: :new_question
   post "/questions" => "questions#create", as: :questions
-
   get "/questions/:id" => "questions#show", as: :question 
+  get "/questions" => "questions#index" 
   
   root "welcome#index"
 

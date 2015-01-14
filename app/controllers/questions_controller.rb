@@ -1,4 +1,8 @@
 class QuestionsController < ApplicationController
+
+  def index 
+    @questions = Question.all
+  end 
   
   # Used to show the form to create the resource
   def new
