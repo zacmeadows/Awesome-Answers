@@ -18,6 +18,8 @@
 |
 <%= link_to "New Question", new_question_path %>
 <hr>
+<%= flash[:notice] || flash[:error] %>
+<hr>
 <%= yield %>
 
 </body>

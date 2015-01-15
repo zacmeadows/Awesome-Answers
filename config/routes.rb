@@ -3,10 +3,14 @@ Rails.application.routes.draw do
   get "/hello" => "welcome#hello" 
   get "/about" => "about#about"
 
-  get "/questions/new" => "questions#new", as: :new_question
-  post "/questions" => "questions#create", as: :questions
-  get "/questions/:id" => "questions#show", as: :question 
-  get "/questions" => "questions#index" 
+  # get "/questions/new" => "questions#new", as: :new_question
+  # post "/questions" => "questions#create", as: :questions ###
+  # get "/questions/:id" => "questions#show", as: :question ##
+  # get "/questions" => "questions#index"
+  # get "/questions/:id/edit" => "questions#edit", as: :edit_question # These are URL helpers # 
+  # patch "/questions/:id" => "questions#update" 
+  # delete "/questions/:id" => "questions#destroy"
+  resources :questions
   
   root "welcome#index"
 

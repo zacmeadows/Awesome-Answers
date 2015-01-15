@@ -1,6 +1,5 @@
 class QuestionsController < ApplicationController
-
-
+  before_action :find_question, only: [:show, :edit, :update, :destroy]
 
   def index 
     @questions = Question.order(:id)
@@ -14,11 +13,12 @@ class QuestionsController < ApplicationController
   # Used to create the resources, expect to recieve 
   # params submitted from the form in the new page
   def create
-    question_params = params.require(:question).permit([:title, :body])
+    # question_params = params.require(:question).permit([:title, :body])
     @question = Question.new question_params
     if @question.save
       # redirect_to question_path(@question)
-      redirect_to @question
+      # flash[:notice] = "Question created succesfully!"
+      redirect_to @question, notice: "Question created successfully!"
     else
       # Show the form again with the error
       render :new
@@ -27,7 +27,6 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @question = Question.find params[:id]
     @question.increment!(:view_count)
     
     # @question.view_count += 1
@@ -35,5 +34,53 @@ class QuestionsController < ApplicationController
 
     # @question.increment(view_count, by = 1)
     # @question.save
+  end
+
+  def edit 
   end 
+
+  def update
+    #question_params = params.require(:question).permit(:title, :body)
+    if @question.update question_params
+      redirect_to @question, notice: "Question updated successfully"
+    else
+      render :edit
+    end 
+  end 
+
+  def destroy # No need for @ sign 
+    @question.destroy 
+    redirect_to questions_path, notice: "Question deleted"
+  end
+
+
+  private
+
+  def find_question
+    @question = Question.find params[:id]
+  end
+
+  def question_params
+    question_params = params.require(:question).permit(:title, :body)
+  end 
+
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
