@@ -1,5 +1,7 @@
 class Question < ActiveRecord::Base
-  validates :title, presence: true, uniqueness: {scope: :body}
+  has_many :answers, dependent: :destroy
+
+  validates :title, presence: true, uniqueness: {scope: :body} #checks for combined uniqueness of body AND title
   validates :body, presence: {message: "must be provided!"}
 
   validates :view_count, numericality: {greater_than_or_equal_to: 0}

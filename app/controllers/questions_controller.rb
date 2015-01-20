@@ -28,6 +28,8 @@ class QuestionsController < ApplicationController
 
   def show
     @question.increment!(:view_count)
+    @answer = Answer.new
+    @answers = @question.answers
     
     # @question.view_count += 1
     # @question.save

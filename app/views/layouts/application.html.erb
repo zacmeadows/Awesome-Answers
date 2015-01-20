@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>AwesomeAnswers</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body>
 
-<a href="/">Home</a>
-|
-<a href="/hello">Hello</a>
-|
-<a href="/about">About</a>
-|
-<%= link_to "All Questions", questions_path %>
-|
-<%= link_to "New Question", new_question_path %>
-<hr>
+<body>
+  <ul class="nav nav-tabs">
+    <li role="presentation" class="active"><a href="/">Home</a></li>
+    <li role="presentation"><a href="/hello">Hello</a></li>
+    <li role="presentation"><a href="/about">About</a></li>
+    <li role="presentation"><%= link_to "All Questions", questions_path %></li>
+    <li role="presentation"><%= link_to "New Question", new_question_path %></li>
+  </ul>
+<br>
 <%= flash[:notice] || flash[:error] %>
 <hr>
 <%= yield %>
-
 </body>
 </html>

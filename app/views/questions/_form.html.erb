@@ -7,11 +7,15 @@
 <% end %>
 
 <%= form_for @question do |f| %>
-  <%= f.label :title %>
-  <%= f.text_field :title %>
+  <div class="form-group">
+    <%= f.label :title %>
+    <%= f.text_field :title, class: "form-control" %>
+  </div>
   <br>
-  <%= f.label :body %>
-  <%= f.text_area :body %>
+  <div class="form-group">
+    <%= f.label :body %>
+    <%= f.text_area :body, class: "form-control" %>
+  </div>
   <br>
   <%= f.submit %> 
 <% end %>
