@@ -1,26 +1,38 @@
-<h1><%= @question.title %></h1>
-<p><%= @question.body %></p>
-
-<p>View Count: <%= @question.view_count %></p>
-<p><%= link_to "Edit", edit_question_path %></p>
-
-<%= link_to "Delete", question_path(@question), method: :delete, data: {confirm: "Are you sure"} %>
-
-<hr>
-
-<h2>Create an Answer</h2>
-
-<%# form_for @answer, url: question_answers_path(@question) do |f| %>
-  <%= form_for [@question, @answer] do |f| %>
-    <div class="form-group">
-      <%= f.label :body %> 
-      <%= f.text_area :body, class: "form-control" %>
-    </div>
-    <%= f.submit class: "btn btn-primary" %> 
-  <% end %> 
-
+<div class="container">
+  <h1><%= @question.title %></h1>
+  <p><%= @question.body %></p>
+  <p>Created By: <%= @question.user_first_name %></p>
+  <p>View Count: <%= @question.view_count %></p>
+  <p><%= link_to "Edit", edit_question_path(@question) %></p>
+  <%= link_to "Delete", question_path(@question), method: :delete, data: {confirm: "Are you sure?"} %>
+  <hr>
+  
+  <h2>Create an Answer</h2>
+  <%= render "/answers/form" %>
+  
   <h2>Answers</h2>
-    <% @answers.each do |answer| %>  
-    <%= answer.body %> 
-    <hr>
-  <% end %> 
+    <% @question.answers.each do |answer| %>  
+    <%= answer.body %>
+    <p>Answered By: <%= answer.user_first_name %></p>
+    <%= link_to "Delete", question_answer_path(@question, answer),method: :delete, data: {confirm: "Are you sure?"}, class: "btn btn-sm btn-danger" %>
+  <hr>
+
+  <h3>Enter a comment</h3>
+    <%= form_for [answer, (@comment || Comment.new)] do |f| %>
+      <div class="form-group">
+        <%= f.label :body %>
+        <%= f.text_area :body, class: "form-control", placeholder: "Enter a comment", rows: 1 %>
+      </div>
+      <%= f.submit class: "btn btn-primary" %>
+  <% end %>
+
+  <h3>Comments</h3>
+  <% answer.comments.each do |comment| %>
+    <div class="well">
+      <%= comment.body %>
+      <%= link_to "Delete", answer_comment_path(answer, comment), method: :delete, data: {confirm: "Are you sure?"}, class: "btn btn-sm btn-danger" %>
+    </div>
+  <% end %>
+
+<% end %>
+</div>

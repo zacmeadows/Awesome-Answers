@@ -1,5 +1,7 @@
 class Question < ActiveRecord::Base
+  belongs_to :user
   has_many :answers, dependent: :destroy
+  has_many :comments, through: :answers
 
   validates :title, presence: true, uniqueness: {scope: :body} #checks for combined uniqueness of body AND title
   validates :body, presence: {message: "must be provided!"}
@@ -19,6 +21,9 @@ class Question < ActiveRecord::Base
 
    scope :last_days, lambda {|x| where(created_at: x.days.ago..Time.now) }
    # scope :last_days, lambda {|num| where("created_at > ?", num.days.ago) }
+   def user_first_name 
+    user.first_name if user
+   end 
 
   def self.recent(number)
     Question.order("updated_at DESC").limit(number)  

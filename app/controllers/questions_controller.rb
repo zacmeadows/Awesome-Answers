@@ -1,6 +1,8 @@
 class QuestionsController < ApplicationController
   before_action :find_question, only: [:show, :edit, :update, :destroy]
 
+  before_action :authenticate_user!, except: [:index, :show]
+
   def index 
     @questions = Question.order(:id)
   end 
@@ -8,6 +10,7 @@ class QuestionsController < ApplicationController
   # Used to show the form to create the resource
   def new
     @question = Question.new
+    render :new
   end
 
   # Used to create the resources, expect to recieve 
@@ -15,6 +18,7 @@ class QuestionsController < ApplicationController
   def create
     # question_params = params.require(:question).permit([:title, :body])
     @question = Question.new question_params
+    @question.user = current_user
     if @question.save
       # redirect_to question_path(@question)
       # flash[:notice] = "Question created succesfully!"
@@ -29,7 +33,7 @@ class QuestionsController < ApplicationController
   def show
     @question.increment!(:view_count)
     @answer = Answer.new
-    @answers = @question.answers
+    # @answers = @question.answers
     
     # @question.view_count += 1
     # @question.save
@@ -50,7 +54,8 @@ class QuestionsController < ApplicationController
     end 
   end 
 
-  def destroy # No need for @ sign 
+  def destroy # No need for @ sign
+  @question = current_user.projects.find params[:id] 
     @question.destroy 
     redirect_to questions_path, notice: "Question deleted"
   end

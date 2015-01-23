@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  devise_for :users
   get "/hello" => "welcome#hello" 
   get "/about" => "about#about"
 
@@ -13,6 +14,10 @@ Rails.application.routes.draw do
   resources :questions do
     resources :answers, only: [:create, :destroy]
   end
+
+  resources :answers, only: [] do 
+    resources :comments, only: [:create, :destroy]
+  end 
   
   root "welcome#index"
 
