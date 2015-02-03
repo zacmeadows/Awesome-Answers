@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   get "/hello" => "welcome#hello" 
   get "/about" => "about#about"
 
+  match "/delayed_job" => DelayedJobWeb, :anchor => false, via: [:get, :post]
+
   # get "/questions/new" => "questions#new", as: :new_question
   # post "/questions" => "questions#create", as: :questions ###
   # get "/questions/:id" => "questions#show", as: :question ##
@@ -13,6 +15,8 @@ Rails.application.routes.draw do
   # delete "/questions/:id" => "questions#destroy"
   resources :questions do
     resources :answers, only: [:create, :destroy]
+    resources :likes, only: [:create, :destroy]
+    resources :favorites, only: [:create, :destroy]
   end
 
   resources :answers, only: [] do 

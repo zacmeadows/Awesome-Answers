@@ -1,26 +1,36 @@
 class AnswersController < ApplicationController
   before_action :find_question
   before_action :authenticate_user!
+  # respond_to :js, :html
+
 
   def create
-    # @question = Question.find params[:question_id]
-    @answer = Answer.new answer_params # ----> Shortcut 
+    @answer          = Answer.new answer_params
     @answer.question = @question
-    @answer.user = current_user
-    if @answer.save
-      redirect_to @question, notice: "Answer created successfully"
-    else
-      render "questions/show" # ----> when you render you bring up an existing template and we won't lose the data we put in there
-    end 
+    @answer.user     = current_user
+    respond_to do |format|
+      if @answer.save
+        AnswersMailer.notify_question_owner(@answer).deliver_later
+        format.html { redirect_to @question, notice: "Answer created successfully!" }
+        format.js   { render }
+      else
+        format.html { render "questions/show" }
+        format.js   { render }
+      end
+    end
   end
 
   def destroy
-    # @question = Question.find params[:question_id]
-    @answer = current_user.answers.find params[:id]
+    @answer   = current_user.answers.find params[:id]
     @answer.destroy
-    redirect_to question_path(@question), notice: "Answer deleted"
-  end 
+    respond_to do |format|
+      format.js   { render }
+      format.html { redirect_to question_path(@question), notice: "Answer deleted!" }
+    # respond_with ()
+    end
+  end
 
+  
   private 
 
   def answer_params

@@ -3,6 +3,15 @@ class Question < ActiveRecord::Base
   has_many :answers, dependent: :destroy
   has_many :comments, through: :answers
 
+  has_many :likes, dependent: :destroy
+  has_many :liked_users, through: :likes, source: :user
+
+  has_many :favorites, dependent: :destroy
+  has_many :favorited_users, through: :favorites, source: :user
+
+  has_many :categorizations, dependent: :destroy
+  has_many :categories, through: :categorizations
+
   validates :title, presence: true, uniqueness: {scope: :body} #checks for combined uniqueness of body AND title
   validates :body, presence: {message: "must be provided!"}
 
@@ -23,6 +32,14 @@ class Question < ActiveRecord::Base
    # scope :last_days, lambda {|num| where("created_at > ?", num.days.ago) }
    def user_first_name 
     user.first_name if user
+   end 
+
+   def likes_count
+     likes.count
+   end 
+
+   def favorites_count
+     favorites.count
    end 
 
   def self.recent(number)

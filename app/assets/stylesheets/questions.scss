@@ -1,3 +1,29 @@
 // Place all the styles related to the questions controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+$primary-color: #f5f5f5;
+
+.logo {
+  color: $primary-color;
+}
+
+.header {
+  background-color: f5f5f5;
+    .subheader {
+      font-size: 10px;
+    }
+}
+
+
+
+
+
+// <div class="header">
+//   <div class="subheader">
+//   </div>
+// </div>
+
+// .header .sub-header {
+
+// }

@@ -2,37 +2,49 @@
   <h1><%= @question.title %></h1>
   <p><%= @question.body %></p>
   <p>Created By: <%= @question.user_first_name %></p>
+  <p>Categories: <%= @question.categories.map(&:name).join(", ") %></p>
   <p>View Count: <%= @question.view_count %></p>
+  <p>Likes Count: <%= @question.likes_count %></p>
+  <p>Favorites Count: <%= @question.favorites_count %></p>
   <p><%= link_to "Edit", edit_question_path(@question) %></p>
   <%= link_to "Delete", question_path(@question), method: :delete, data: {confirm: "Are you sure?"} %>
   <hr>
-  
-  <h2>Create an Answer</h2>
-  <%= render "/answers/form" %>
-  
-  <h2>Answers</h2>
-    <% @question.answers.each do |answer| %>  
-    <%= answer.body %>
-    <p>Answered By: <%= answer.user_first_name %></p>
-    <%= link_to "Delete", question_answer_path(@question, answer),method: :delete, data: {confirm: "Are you sure?"}, class: "btn btn-sm btn-danger" %>
+
+
+  <%#= button_to "Like", question_likes_path(@question), class: "btn btn-info" %>
+  <% if user_signed_in? && current_user.has_liked?(@question) %>
+  <!-- This should be refactored to a method inside a model -->
+    <%# @like = Like.where(question_id: @question.id, user_id: current_user.id).first %>
+    <% @like = current_user.likes.find_by_question_id(@question.id) %>
+    <%= link_to "Unlike", question_like_path(@question, @like), class: "btn btn-danger", method: :delete %>
+  <% else %>
+    <%= link_to "Like", question_likes_path(@question), class: "btn btn-info", method: :post %>
+  <% end %>
   <hr>
 
-  <h3>Enter a comment</h3>
-    <%= form_for [answer, (@comment || Comment.new)] do |f| %>
-      <div class="form-group">
-        <%= f.label :body %>
-        <%= f.text_area :body, class: "form-control", placeholder: "Enter a comment", rows: 1 %>
-      </div>
-      <%= f.submit class: "btn btn-primary" %>
-  <% end %>
+  <% if user_signed_in? && current_user.has_favorited?(@question) %>
+    <% @favorite = current_user.favorites.find_by_question_id(@question.id) %>
+    <%= link_to "Unfavorite", question_favorite_path(@question, @favorite), class: "btn btn-danger", method: :delete %>
+  <% else %>
+    <%= link_to "Favorite", question_favorites_path(@question), class: "btn btn-info", method: :post %>
+  <% end %> 
+  <hr>
+  
 
-  <h3>Comments</h3>
-  <% answer.comments.each do |comment| %>
-    <div class="well">
-      <%= comment.body %>
-      <%= link_to "Delete", answer_comment_path(answer, comment), method: :delete, data: {confirm: "Are you sure?"}, class: "btn btn-sm btn-danger" %>
-    </div>
-  <% end %>
+  <h2>Create An Answer</h2>
 
-<% end %>
+  <div class="answer-form">
+    <%= render "/answers/form" %>
+  </div>
+
+  <h2>Answers</h2>
+  <%#= render @question.answers %>
+  <div class="answers">
+    <% @question.answers.each do |answer| %>
+      <%= render partial: "/answers/answer", locals: {answer: answer} %>
+    <% end %>  
+  </div>
 </div>
+
+
+

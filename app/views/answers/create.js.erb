@@ -1,0 +1,7 @@
+<% if @answer.errors.any? %>
+  $(".answer-form").html("<%= j render "/answers/form" %>");
+<% else %>
+  $(".answers").prepend("<%= j render partial: '/answers/answer', locals: {answer: @answer} %>");
+  <% @answer = Answer.new %>
+  $(".answer-form").html("<%= j render "/answers/form" %>");
+<% end %>

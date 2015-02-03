@@ -31,15 +31,17 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @question.increment!(:view_count)
-    @answer = Answer.new
-    # @answers = @question.answers
-    
     # @question.view_count += 1
     # @question.save
-
-    # @question.increment(view_count, by = 1)
-    # @question.save
+    @question.increment!(:view_count)
+    @answer = Answer.new
+    @answers = @question.answers
+    respond_to do |format|
+      format.html { render }
+      format.json {render json: @question.to_json }
+      format.text {render text: @question.title }
+      format.xml {render xml: @question.to_xml }
+    end
   end
 
   def edit 
@@ -55,7 +57,7 @@ class QuestionsController < ApplicationController
   end 
 
   def destroy # No need for @ sign
-  @question = current_user.projects.find params[:id] 
+  # @question = current_user.projects.find params[:id] 
     @question.destroy 
     redirect_to questions_path, notice: "Question deleted"
   end
@@ -68,7 +70,7 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    question_params = params.require(:question).permit(:title, :body)
+    question_params = params.require(:question).permit(:title, :body, {category_ids: []})
   end 
 
 end
