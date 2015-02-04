@@ -6,8 +6,14 @@
   <p>View Count: <%= @question.view_count %></p>
   <p>Likes Count: <%= @question.likes_count %></p>
   <p>Favorites Count: <%= @question.favorites_count %></p>
-  <p><%= link_to "Edit", edit_question_path(@question) %></p>
-  <%= link_to "Delete", question_path(@question), method: :delete, data: {confirm: "Are you sure?"} %>
+  
+  <% if can? :edit, @question %>
+    <p><%= link_to "Edit", edit_question_path(@question) %></p>
+  <% end %>
+
+  <% if can? :destroy, @question %>
+    <%= link_to "Delete", question_path(@question), method: :delete, data: {confirm: "Are you sure?"} %>
+  <% end %>
   <hr>
 
 

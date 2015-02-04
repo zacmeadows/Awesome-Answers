@@ -2,6 +2,7 @@ class QuestionsController < ApplicationController
   before_action :find_question, only: [:show, :edit, :update, :destroy]
 
   before_action :authenticate_user!, except: [:index, :show]
+  before_action :restrict_access, only: [:destroy]
 
   def index 
     @questions = Question.order(:id)
@@ -45,6 +46,9 @@ class QuestionsController < ApplicationController
   end
 
   def edit 
+    unless can? :edit, @question
+      redirect_to root_path, alert: "Access Denied" unless can? :edit
+    end 
   end 
 
   def update
@@ -74,22 +78,13 @@ class QuestionsController < ApplicationController
                                                                       {collaborator_ids: []})
   end 
 
+  def restrict_access
+    unless can? :manage, @question
+      redirect_to root_path, alert: "access denied"
+    end 
+  end 
+
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

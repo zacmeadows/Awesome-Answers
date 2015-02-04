@@ -3,6 +3,7 @@ source 'https://rubygems.org' # where to download the gems from
 
 gem 'rails', '4.2.0'
 gem 'pg'
+gem 'cancancan', '~> 1.10'
 gem 'simple_form'
 gem 'friendly_id', '~> 5.1.0'
 gem 'sass-rails', '~> 5.0'
