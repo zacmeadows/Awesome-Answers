@@ -66,11 +66,12 @@ class QuestionsController < ApplicationController
   private
 
   def find_question
-    @question = Question.find params[:id]
+    @question = Question.friendly.find params[:id]
   end
 
   def question_params
-    question_params = params.require(:question).permit(:title, :body, {category_ids: []})
+    question_params = params.require(:question).permit(:title, :body, {category_ids: []},
+                                                                      {collaborator_ids: []})
   end 
 
 end

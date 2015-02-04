@@ -3,7 +3,7 @@ class LikesController < ApplicationController
 
   # 
   def create
-    @question = Question.find params[:question_id]
+    @question = Question.friendly.find params[:question_id]
     @like = @question.likes.new 
     @like.user = current_user # current_user comes with 'devise' gem
     if @like.save
@@ -14,7 +14,7 @@ class LikesController < ApplicationController
   end 
 
   def destroy
-    question = Question.find params[:question_id]
+    question = Question.friendly.find params[:question_id]
     like = question.likes.find params[:id]
     if like.destroy
       redirect_to question, notice: "Unliked!"

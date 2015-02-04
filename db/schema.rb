@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150130230426) do
+ActiveRecord::Schema.define(version: 20150204184759) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,16 @@ ActiveRecord::Schema.define(version: 20150130230426) do
 
   add_index "categorizations", ["category_id"], name: "index_categorizations_on_category_id", using: :btree
   add_index "categorizations", ["question_id"], name: "index_categorizations_on_question_id", using: :btree
+
+  create_table "collaborations", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "question_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "collaborations", ["question_id"], name: "index_collaborations_on_question_id", using: :btree
+  add_index "collaborations", ["user_id"], name: "index_collaborations_on_user_id", using: :btree
 
   create_table "comments", force: :cascade do |t|
     t.text     "body"
@@ -78,6 +88,28 @@ ActiveRecord::Schema.define(version: 20150130230426) do
   add_index "favorites", ["question_id"], name: "index_favorites_on_question_id", using: :btree
   add_index "favorites", ["user_id"], name: "index_favorites_on_user_id", using: :btree
 
+  create_table "followings", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "follower_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "followings", ["user_id"], name: "index_followings_on_user_id", using: :btree
+
+  create_table "friendly_id_slugs", force: :cascade do |t|
+    t.string   "slug",                      null: false
+    t.integer  "sluggable_id",              null: false
+    t.string   "sluggable_type", limit: 50
+    t.string   "scope"
+    t.datetime "created_at"
+  end
+
+  add_index "friendly_id_slugs", ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true, using: :btree
+  add_index "friendly_id_slugs", ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type", using: :btree
+  add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id", using: :btree
+  add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
+
   create_table "likes", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "question_id"
@@ -95,8 +127,10 @@ ActiveRecord::Schema.define(version: 20150130230426) do
     t.datetime "updated_at", null: false
     t.integer  "view_count"
     t.integer  "user_id"
+    t.string   "slug"
   end
 
+  add_index "questions", ["slug"], name: "index_questions_on_slug", unique: true, using: :btree
   add_index "questions", ["title"], name: "index_questions_on_title", using: :btree
   add_index "questions", ["user_id"], name: "index_questions_on_user_id", using: :btree
 
@@ -124,9 +158,12 @@ ActiveRecord::Schema.define(version: 20150130230426) do
   add_foreign_key "answers", "users"
   add_foreign_key "categorizations", "categories"
   add_foreign_key "categorizations", "questions"
+  add_foreign_key "collaborations", "questions"
+  add_foreign_key "collaborations", "users"
   add_foreign_key "comments", "answers"
   add_foreign_key "favorites", "questions"
   add_foreign_key "favorites", "users"
+  add_foreign_key "followings", "users"
   add_foreign_key "likes", "questions"
   add_foreign_key "likes", "users"
   add_foreign_key "questions", "users"

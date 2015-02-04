@@ -3,12 +3,14 @@
   <p>Answered by: <%= answer.user_first_name %></p>
   <%= link_to "Delete", question_answer_path(@question, answer), data: {confirm: "Are you sure"}, method: :delete, class: "btn btn-sm btn-danger", remote: true %>
   <hr>
+  
   <%= form_for [answer, (@comment || Comment.new)] do |f| %>
     <div class="form-group">
       <%= f.text_area :body, class: "form-control", placeholder: "Enter a comment", rows: 1 %>
     </div>
     <%= f.submit class: "btn btn-info btn-sm" %>
   <% end %>
+  
   <% answer.comments.each do |comment| %>
     <div class="well" id="<%= dom_id(comment) %>">
       <%= comment.body %>

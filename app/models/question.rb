@@ -12,6 +12,9 @@ class Question < ActiveRecord::Base
   has_many :categorizations, dependent: :destroy
   has_many :categories, through: :categorizations
 
+  has_many :collaborations, dependent: :destroy
+  has_many :collaborators, through: :collaborations, source: :user
+
   validates :title, presence: true, uniqueness: {scope: :body} #checks for combined uniqueness of body AND title
   validates :body, presence: {message: "must be provided!"}
 
@@ -33,6 +36,12 @@ class Question < ActiveRecord::Base
    def user_first_name 
     user.first_name if user
    end 
+
+   # def to_param
+   #  "#{id}-#{title}".parameterize
+   # end 
+   extend FriendlyId
+   friendly_id :title, use: :slugged
 
    def likes_count
      likes.count
